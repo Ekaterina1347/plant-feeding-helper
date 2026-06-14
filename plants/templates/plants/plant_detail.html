@@ -19,6 +19,13 @@
         <hr>
 
         <h3>Подобрать удобрение</h3>
+                {% if recommended %}
+            <div class="alert alert-info">
+                <strong>Рекомендуемое удобрение:</strong> {{ recommended.name }} ({{ recommended.npk_ratio }}) — {{ recommended.get_type_display }}
+            </div>
+        {% endif %}
+
+        <h3>Подобрать удобрение</h3>
         <form method="post" class="row g-3">
             {% csrf_token %}
             <div class="col-md-4">
@@ -26,7 +33,9 @@
                 <select name="fertilizer" id="fertilizer" class="form-select" required>
                     <option value="">-- Выберите --</option>
                     {% for f in fertilizers %}
-                        <option value="{{ f.id }}">{{ f.name }} ({{ f.npk_ratio }})</option>
+                        <option value="{{ f.id }}" {% if recommended and f.id == recommended.id %}selected{% endif %}>
+                            {{ f.name }} ({{ f.npk_ratio }})
+                        </option>
                     {% endfor %}
                 </select>
             </div>

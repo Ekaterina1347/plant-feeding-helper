@@ -16,8 +16,18 @@ import pandas as pd
 
 
 def plant_detail(request, plant_id):
+    """Страница с деталями растения и формой подбора удобрения"""
     plant = get_object_or_404(Plant, id=plant_id)
     fertilizers = Fertilizer.objects.all()
+
+    recommended = None
+    if plant.growth_phase == 'growth':
+        recommended = fertilizers.filter(type='mineral').first()
+    elif plant.growth_phase == 'flowering':
+        recommended = fertilizers.filter(type='organic').first()
+    else:
+        recommended = fertilizers.filter(type='universal').first()
+
     schedule = None
     graph_html = None
     dosage_ml = None
@@ -57,6 +67,7 @@ def plant_detail(request, plant_id):
     return render(request, 'plants/plant_detail.html', {
         'plant': plant,
         'fertilizers': fertilizers,
+        'recommended': recommended,
         'dosage_ml': dosage_ml,
         'graph_html': graph_html,
         'error': error,
