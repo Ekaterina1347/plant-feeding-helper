@@ -14,7 +14,7 @@
                 <div class="col-md-4 mb-3">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">{{ plant.name }}</h5>
+                            <h5 class="card-title"><a href="{% url 'plant_detail' plant.id %}">{{ plant.name }}</a></h5>
                             <p class="card-text">{{ plant.description|default:"Описание отсутствует" }}</p>
                             <p><strong>Фаза:</strong> {{ plant.get_growth_phase_display }}</p>
                             <p><strong>Подкормка:</strong> раз в {{ plant.feeding_interval_days }} дней</p>
