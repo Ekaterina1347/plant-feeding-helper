@@ -47,21 +47,36 @@ def plant_detail(request, plant_id):
 
             start_date = timezone.now().date()
             dates = []
+            dosages = []
             current_date = start_date
+            current_dosage = float(dosage_ml)
+
             for i in range(8):
                 dates.append(current_date)
+                dosages.append(round(current_dosage, 1))
                 current_date = current_date + timedelta(days=plant.feeding_interval_days)
-
-            dosages = [float(dosage_ml)] * 8
+                current_dosage = current_dosage * 1.05
 
             df = pd.DataFrame({
                 'Дата': dates,
                 'Дозировка (мл)': dosages
             })
 
-            fig = px.line(df, x='Дата', y='Дозировка (мл)',
-                          title=f'График подкормок для {plant.name}',
-                          markers=True)
+            fig = px.bar(
+                df,
+                x='Дата',
+                y='Дозировка (мл)',
+                title=f'График подкормок: {plant.name}',
+                text='Дозировка (мл)',
+                color='Дозировка (мл)',
+                color_continuous_scale='Greens'
+            )
+            fig.update_traces(textposition='outside')
+            fig.update_layout(
+                xaxis_title='Дата подкормки',
+                yaxis_title='Объём удобрения (мл)',
+                title_font_size=18,
+            )
             graph_html = fig.to_html(full_html=False)
 
     return render(request, 'plants/plant_detail.html', {
