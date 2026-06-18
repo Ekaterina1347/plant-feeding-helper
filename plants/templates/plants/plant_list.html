@@ -9,6 +9,17 @@
 <body>
     <div class="container mt-4">
         <h1 class="mb-4">Каталог комнатных растений</h1>
+
+        <form method="get" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Поиск растения..." value="{{ query }}">
+                <button type="submit" class="btn btn-primary">Найти</button>
+                {% if query %}
+                    <a href="{% url 'plant_list' %}" class="btn btn-outline-secondary">Сбросить</a>
+                {% endif %}
+            </div>
+        </form>
+
         <div class="row">
             {% for plant in plants %}
                 <div class="col-md-4 mb-3">

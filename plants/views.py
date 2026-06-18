@@ -3,9 +3,16 @@ from .models import Plant
 
 
 def plant_list(request):
-    plants = Plant.objects.all()
-    return render(request, 'plants/plant_list.html', {'plants': plants})
-
+    """Страница со списком всех растений с поиском"""
+    query = request.GET.get('q', '')
+    if query:
+        plants = Plant.objects.filter(name__iregex=query)
+    else:
+        plants = Plant.objects.all()
+    return render(request, 'plants/plant_list.html', {
+        'plants': plants,
+        'query': query,
+    })
 
 from django.shortcuts import get_object_or_404, redirect
 from .models import Plant, Fertilizer, FeedingSchedule
